@@ -9,7 +9,22 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Connect to MongoDB
-connectDB();
+connectDB().then(async () => {
+    // Auto-seed admin user
+    const Usuario = require('./models/Usuario');
+    try {
+        const existingAdmin = await Usuario.findOne({ username: 'bmilumina' });
+        if (!existingAdmin) {
+            await new Usuario({
+                username: 'bmilumina',
+                password_hash: 'Tortuga77710'
+            }).save();
+            console.log('✅ Admin user automatically seeded on startup');
+        }
+    } catch (err) {
+        console.error('Error auto-seeding admin:', err.message);
+    }
+});
 
 // Middleware
 app.use(cors());
