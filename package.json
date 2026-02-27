@@ -7,7 +7,7 @@
     "dev:server": "node server/index.js",
     "dev:client": "cd client && npm run dev",
     "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
-    "build": "cd client && npm run build",
+    "build": "cd client && npm install && npm run build",
     "start": "NODE_ENV=production node server/index.js",
     "seed": "node server/seed.js"
   },
@@ -22,5 +22,8 @@
     "express": "^5.2.1",
     "jsonwebtoken": "^9.0.3",
     "mongoose": "^9.2.3"
+  },
+  "engines": {
+    "node": ">=20.19.0"
   }
 }
