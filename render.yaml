@@ -7,7 +7,7 @@ services:
     envVars:
       - key: NODE_ENV
         value: production
-      - key: MONGODB_URI
+      - key: mongodb+srv://bmilumina:Tortuga92bmilumina.pr5eqeg.mongodb.net/
         sync: false
       - key: JWT_SECRET
         generateValue: true
