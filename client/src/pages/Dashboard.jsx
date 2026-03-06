@@ -13,6 +13,7 @@ export default function Dashboard() {
     const loadStats = async () => {
         try {
             const data = await getStats();
+            console.log("DASHBOARD STATS:", data);
             setStats(data);
         } catch (err) {
             console.error(err);
@@ -24,13 +25,12 @@ export default function Dashboard() {
     if (loading) return <Loading />;
     if (!stats) return <p>Error al cargar datos</p>;
 
-    const estados = ['pendiente', 'en_produccion', 'listo', 'entregado', 'cancelado'];
+    const estados = ['pendiente', 'en_produccion', 'listo', 'entregado_sin_cobrar', 'cobrado_pendiente_entrega', 'entregado_y_cobrado', 'cancelado'];
 
     return (
         <div>
             <div className="page-header">
                 <h2>Dashboard</h2>
-                <p>Resumen general de BM Iluminación</p>
             </div>
 
             <div className="stats-grid">
@@ -45,7 +45,7 @@ export default function Dashboard() {
                     <div className="stat-icon blue">📦</div>
                     <div className="stat-info">
                         <h3>{stats.pedidosActivos}</h3>
-                        <p>Pedidos en Curso</p>
+                        <p>Pedidos Totales</p>
                     </div>
                 </div>
                 <div className="stat-card green">
@@ -60,6 +60,22 @@ export default function Dashboard() {
                     <div className="stat-info">
                         <h3>{formatCurrency(stats.montoMes)}</h3>
                         <p>Facturación del Mes</p>
+                    </div>
+                </div>
+            </div>
+
+            <div className="stats-grid" style={{ gridTemplateColumns: 'minmax(200px, 1fr) minmax(200px, 1fr)', gap: '1.5rem', marginBottom: '2rem' }}>
+                <div className="stat-card" style={{ background: 'var(--bg-card)', border: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center', flexDirection: 'column', position: 'relative', overflow: 'hidden' }}>
+                    <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '3px', background: 'var(--turquoise)' }}></div>
+                    <div className="stat-info">
+                        <p style={{ fontSize: '1.1rem', marginBottom: '0.5rem', color: 'var(--text-muted)' }}>Dinero a cobrar</p>
+                        <h3 style={{ fontSize: '2.2rem', color: 'var(--turquoise)', fontWeight: 700 }}>{formatCurrency(stats.dineroACobrar)}</h3>
+                    </div>
+                </div>
+                <div className="stat-card purple" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center', flexDirection: 'column' }}>
+                    <div className="stat-info">
+                        <p style={{ fontSize: '1.1rem', marginBottom: '0.5rem', color: 'var(--text-muted)' }}>Facturación Total</p>
+                        <h3 style={{ fontSize: '2.2rem', color: 'var(--accent)', fontWeight: 700 }}>{formatCurrency(stats.facturacionTotal)}</h3>
                     </div>
                 </div>
             </div>

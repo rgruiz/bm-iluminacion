@@ -29,6 +29,10 @@
   --info-bg: rgba(59, 130, 246, 0.12);
   --purple: #a855f7;
   --purple-bg: rgba(168, 85, 247, 0.12);
+  --turquoise: #14b8a6;
+  --turquoise-bg: rgba(20, 184, 166, 0.12);
+  --pink: #ec4899;
+  --pink-bg: rgba(236, 72, 153, 0.12);
 
   --border: rgba(255, 255, 255, 0.06);
   --border-light: rgba(255, 255, 255, 0.1);
@@ -350,7 +354,7 @@ a:hover {
 }
 
 .stat-info p {
-  font-size: 0.8rem;
+  font-size: 1.2rem;
   color: var(--text-muted);
   font-weight: 500;
 }
@@ -404,7 +408,7 @@ thead th {
 
 tbody td {
   padding: 0.85rem 1.25rem;
-  font-size: 0.88rem;
+  font-size: 1.2rem;
   border-bottom: 1px solid var(--border);
   color: var(--text-secondary);
 }
@@ -485,14 +489,19 @@ td .primary-text {
   color: var(--purple);
 }
 
-.badge.entregado {
-  background: var(--success-bg);
-  color: var(--success);
+.badge.entregado_sin_cobrar {
+  background: var(--turquoise-bg);
+  color: var(--turquoise);
 }
 
-.badge.cobrado {
-  background: rgba(16, 185, 129, 0.15);
-  color: #10b981;
+.badge.cobrado_pendiente_entrega {
+  background: var(--pink-bg);
+  color: var(--pink);
+}
+
+.badge.entregado_y_cobrado {
+  background: var(--success-bg);
+  color: var(--success);
 }
 
 .badge.cancelado {
@@ -841,20 +850,28 @@ textarea {
   color: var(--purple);
 }
 
-.status-bar.entregado {
+.status-bar.entregado_sin_cobrar {
+  background: var(--turquoise-bg);
+}
+
+.status-bar.entregado_sin_cobrar .status-label {
+  color: var(--turquoise);
+}
+
+.status-bar.cobrado_pendiente_entrega {
+  background: var(--pink-bg);
+}
+
+.status-bar.cobrado_pendiente_entrega .status-label {
+  color: var(--pink);
+}
+
+.status-bar.entregado_y_cobrado {
   background: var(--success-bg);
 }
 
-.status-bar.entregado .status-label {
+.status-bar.entregado_y_cobrado .status-label {
   color: var(--success);
-}
-
-.status-bar.cobrado {
-  background: rgba(16, 185, 129, 0.15);
-}
-
-.status-bar.cobrado .status-label {
-  color: #10b981;
 }
 
 .status-bar.cancelado {

@@ -92,8 +92,9 @@ export const estadoLabels = {
     pendiente: 'Pendiente',
     en_produccion: 'En Producción',
     listo: 'Listo',
-    entregado: 'Entregado',
-    cobrado: 'Cobrado',
+    entregado_sin_cobrar: 'Entregado sin cobrar',
+    cobrado_pendiente_entrega: 'Cobrado - Pendiente de entrega',
+    entregado_y_cobrado: 'Entregado y cobrado',
     cancelado: 'Cancelado'
 };
 

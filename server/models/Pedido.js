@@ -14,7 +14,7 @@ const pedidoSchema = new mongoose.Schema({
     fecha_entrega: { type: Date },
     estado: {
         type: String,
-        enum: ['pendiente', 'en_produccion', 'listo', 'entregado', 'cobrado', 'cancelado'],
+        enum: ['pendiente', 'en_produccion', 'listo', 'entregado_sin_cobrar', 'cobrado_pendiente_entrega', 'entregado_y_cobrado', 'cancelado'],
         default: 'pendiente'
     },
     items: [pedidoItemSchema],

@@ -58,9 +58,9 @@ router.get('/stats', async (req, res) => {
         const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
         const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59);
 
-        const [totalClientes, pedidosActivos, pedidosMes, montosMes, porEstado, recientes] = await Promise.all([
+        const [totalClientes, pedidosActivos, pedidosMes, montosMes, facturacionTotalAggregation, dineroACobrarAggregation, porEstado, recientes] = await Promise.all([
             require('../models/Cliente').countDocuments({ activo: true }),
-            Pedido.countDocuments({ activo: true, estado: { $nin: ['entregado', 'cobrado', 'cancelado'] } }),
+            Pedido.countDocuments({ activo: true }),
             Pedido.countDocuments({
                 activo: true,
                 fecha_pedido: { $gte: startOfMonth, $lte: endOfMonth }
@@ -69,8 +69,26 @@ router.get('/stats', async (req, res) => {
                 {
                     $match: {
                         activo: true,
-                        estado: 'cobrado',
+                        estado: { $in: ['cobrado_pendiente_entrega', 'entregado_y_cobrado'] },
                         fecha_pedido: { $gte: startOfMonth, $lte: endOfMonth }
+                    }
+                },
+                { $group: { _id: null, total: { $sum: '$total' } } }
+            ]),
+            Pedido.aggregate([
+                {
+                    $match: {
+                        activo: true,
+                        estado: { $in: ['cobrado_pendiente_entrega', 'entregado_y_cobrado'] }
+                    }
+                },
+                { $group: { _id: null, total: { $sum: '$total' } } }
+            ]),
+            Pedido.aggregate([
+                {
+                    $match: {
+                        activo: true,
+                        estado: { $nin: ['cobrado_pendiente_entrega', 'entregado_y_cobrado', 'cancelado'] }
                     }
                 },
                 { $group: { _id: null, total: { $sum: '$total' } } }
@@ -90,6 +108,8 @@ router.get('/stats', async (req, res) => {
             pedidosActivos,
             pedidosMes,
             montoMes: montosMes[0]?.total || 0,
+            facturacionTotal: facturacionTotalAggregation[0]?.total || 0,
+            dineroACobrar: dineroACobrarAggregation[0]?.total || 0,
             porEstado: porEstado.reduce((acc, s) => { acc[s._id] = s.count; return acc; }, {}),
             recientes
         });

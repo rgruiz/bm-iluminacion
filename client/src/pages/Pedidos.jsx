@@ -271,8 +271,9 @@ export default function Pedidos() {
                             <option value="pendiente">Pendiente</option>
                             <option value="en_produccion">En Producción</option>
                             <option value="listo">Listo</option>
-                            <option value="entregado">Entregado</option>
-                            <option value="cobrado">Cobrado</option>
+                            <option value="entregado_sin_cobrar">Entregado sin cobrar</option>
+                            <option value="cobrado_pendiente_entrega">Cobrado - Pendiente de entrega</option>
+                            <option value="entregado_y_cobrado">Entregado y cobrado</option>
                             <option value="cancelado">Cancelado</option>
                         </select>
                         <select value={filtroActivo} onChange={e => setFiltroActivo(e.target.value)}>
