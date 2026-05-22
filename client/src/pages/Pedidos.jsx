@@ -5,7 +5,7 @@ import {
 } from '../utils/api';
 import { Modal, ConfirmModal, Pagination, Loading, useToast } from '../components/Shared';
 
-const emptyItem = { descripcion: '', cantidad: 1, precio_unitario: 0, subtotal: 0 };
+const emptyItem = { descripcion: '', cantidad: 1, precio_unitario: 0, descuento: '', subtotal: 0 };
 
 export default function Pedidos() {
     const [pedidos, setPedidos] = useState([]);
@@ -72,6 +72,7 @@ export default function Pedidos() {
                 descripcion: i.descripcion,
                 cantidad: i.cantidad,
                 precio_unitario: i.precio_unitario,
+                descuento: i.descuento || '',
                 subtotal: i.subtotal
             })),
             notas: p.notas || ''
@@ -86,10 +87,12 @@ export default function Pedidos() {
         setForm(prev => {
             const items = [...prev.items];
             items[index] = { ...items[index], [field]: value };
-            if (field === 'cantidad' || field === 'precio_unitario') {
+            if (field === 'cantidad' || field === 'precio_unitario' || field === 'descuento') {
                 const cant = field === 'cantidad' ? Number(value) : items[index].cantidad;
                 const precio = field === 'precio_unitario' ? Number(value) : items[index].precio_unitario;
-                items[index].subtotal = Math.round(cant * precio * 100) / 100;
+                const descStr = field === 'descuento' ? value : items[index].descuento;
+                const desc = descStr ? Number(descStr) : 0;
+                items[index].subtotal = Math.round(cant * precio * (1 - desc / 100) * 100) / 100;
             }
             return { ...prev, items };
         });
@@ -151,11 +154,15 @@ export default function Pedidos() {
         let empresa = {};
         try { empresa = await getEmpresa(); } catch (e) { /* ignore */ }
 
+        const totalOriginal = pedido.items.reduce((sum, item) => sum + (item.cantidad * item.precio_unitario), 0);
+        const ahorroTotal = totalOriginal - pedido.total;
+
         const itemsRows = pedido.items.map(item =>
             `<tr>
                 <td>${item.descripcion}</td>
                 <td style="text-align:center">${item.cantidad}</td>
                 <td style="text-align:right">${formatCurrency(item.precio_unitario)}</td>
+                <td style="text-align:center">${item.descuento ? item.descuento + '%' : '-'}</td>
                 <td style="text-align:right;font-weight:600">${formatCurrency(item.subtotal)}</td>
             </tr>`
         ).join('');
@@ -224,12 +231,24 @@ export default function Pedidos() {
   <div class="section">
     <h3>Ítems del Pedido</h3>
     <table>
-      <thead><tr><th>Descripción</th><th style="text-align:center">Cant.</th><th style="text-align:right">Precio Unit.</th><th style="text-align:right">Subtotal</th></tr></thead>
+      <thead><tr><th>Descripción</th><th style="text-align:center">Cant.</th><th style="text-align:right">Precio Unit.</th><th style="text-align:center">Desc. (%)</th><th style="text-align:right">Subtotal</th></tr></thead>
       <tbody>${itemsRows}</tbody>
     </table>
     <div class="total-section">
-      <span class="total-label">Total:</span>
-      <span class="total">${formatCurrency(pedido.total)}</span>
+      ${ahorroTotal > 0 ? `
+      <div style="margin-bottom: 0.5rem; color: #666;">
+        <span class="total-label">Subtotal sin descuentos:</span>
+        <span style="font-size: 0.95rem; font-weight: 600;">${formatCurrency(totalOriginal)}</span>
+      </div>
+      <div style="margin-bottom: 0.5rem; color: #2e7d32;">
+        <span class="total-label">Ahorro por descuentos:</span>
+        <span style="font-size: 0.95rem; font-weight: 600;">- ${formatCurrency(ahorroTotal)}</span>
+      </div>
+      ` : ''}
+      <div style="margin-top: 0.5rem; padding-top: 0.5rem; ${ahorroTotal > 0 ? 'border-top: 1px solid #eee;' : ''}">
+        <span class="total-label">Total Final:</span>
+        <span class="total">${formatCurrency(pedido.total)}</span>
+      </div>
     </div>
   </div>
 
@@ -400,6 +419,7 @@ export default function Pedidos() {
                                     <th>Descripción</th>
                                     <th style={{ width: '90px' }}>Cant.</th>
                                     <th style={{ width: '130px' }}>Precio Unit.</th>
+                                    <th style={{ width: '90px' }}>Desc. (%)</th>
                                     <th style={{ width: '120px' }}>Subtotal</th>
                                     <th style={{ width: '50px' }}></th>
                                 </tr>
@@ -429,6 +449,16 @@ export default function Pedidos() {
                                                 step="0.01"
                                                 value={item.precio_unitario}
                                                 onChange={e => updateItem(i, 'precio_unitario', e.target.value)}
+                                            />
+                                        </td>
+                                        <td>
+                                            <input
+                                                type="number"
+                                                min="5"
+                                                max="100"
+                                                value={item.descuento}
+                                                onChange={e => updateItem(i, 'descuento', e.target.value)}
+                                                placeholder="%"
                                             />
                                         </td>
                                         <td style={{ textAlign: 'right', fontWeight: 500 }}>
@@ -491,6 +521,7 @@ export default function Pedidos() {
                                         <th>Descripción</th>
                                         <th>Cantidad</th>
                                         <th>Precio Unit.</th>
+                                        <th>Desc. (%)</th>
                                         <th>Subtotal</th>
                                     </tr>
                                 </thead>
@@ -500,6 +531,7 @@ export default function Pedidos() {
                                             <td>{item.descripcion}</td>
                                             <td>{item.cantidad}</td>
                                             <td>{formatCurrency(item.precio_unitario)}</td>
+                                            <td>{item.descuento ? item.descuento + '%' : '-'}</td>
                                             <td style={{ fontWeight: 500 }}>{formatCurrency(item.subtotal)}</td>
                                         </tr>
                                     ))}

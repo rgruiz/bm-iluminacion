@@ -136,10 +136,13 @@ router.post('/', async (req, res) => {
         const data = { ...req.body };
         // Calculate item subtotals
         if (data.items) {
-            data.items = data.items.map(item => ({
-                ...item,
-                subtotal: Math.round(item.cantidad * item.precio_unitario * 100) / 100
-            }));
+            data.items = data.items.map(item => {
+                const desc = item.descuento ? Number(item.descuento) : 0;
+                return {
+                    ...item,
+                    subtotal: Math.round(item.cantidad * item.precio_unitario * (1 - desc / 100) * 100) / 100
+                };
+            });
         }
         const pedido = new Pedido(data);
         await pedido.save();
@@ -156,10 +159,13 @@ router.put('/:id', async (req, res) => {
         const data = { ...req.body };
         // Calculate item subtotals
         if (data.items) {
-            data.items = data.items.map(item => ({
-                ...item,
-                subtotal: Math.round(item.cantidad * item.precio_unitario * 100) / 100
-            }));
+            data.items = data.items.map(item => {
+                const desc = item.descuento ? Number(item.descuento) : 0;
+                return {
+                    ...item,
+                    subtotal: Math.round(item.cantidad * item.precio_unitario * (1 - desc / 100) * 100) / 100
+                };
+            });
             // Calculate total
             data.total = data.items.reduce((sum, item) => sum + item.subtotal, 0);
         }

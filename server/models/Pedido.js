@@ -4,6 +4,7 @@ const pedidoItemSchema = new mongoose.Schema({
     descripcion: { type: String, required: true, trim: true },
     cantidad: { type: Number, required: true, min: 1 },
     precio_unitario: { type: Number, required: true, min: 0 },
+    descuento: { type: Number, min: 5, max: 100 },
     subtotal: { type: Number, required: true, min: 0 }
 }, { _id: true });
 
