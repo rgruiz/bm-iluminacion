@@ -197,7 +197,10 @@ export default function Pedidos() {
   .notas h3 { font-size: 0.75rem; color: #888; margin-bottom: 0.3rem; text-transform: uppercase; border: none; }
   .notas p { font-size: 0.85rem; color: #444; line-height: 1.5; }
   .footer { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid #ddd; text-align: center; font-size: 0.75rem; color: #aaa; }
-  @media print { body { padding: 0; } }
+  @media print { 
+    @page { margin: 0; } 
+    body { padding: 2rem; } 
+  }
 </style>
 </head>
 <body>
@@ -254,7 +257,7 @@ export default function Pedidos() {
 
   ${pedido.notas ? `<div class="notas"><h3>Notas</h3><p>${pedido.notas}</p></div>` : ''}
 
-  <div class="footer">Documento generado el ${new Date().toLocaleDateString('es-AR')} — ${empresa.razon_social || 'BM Iluminación'}</div>
+  <div class="footer">- ${empresa.razon_social || 'BM Iluminación'} -</div>
 </body>
 </html>`;
 

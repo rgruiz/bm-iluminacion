@@ -84,7 +84,8 @@ export const formatCurrency = (amount) =>
 export const formatDate = (date) => {
     if (!date) return '—';
     return new Date(date).toLocaleDateString('es-AR', {
-        day: '2-digit', month: '2-digit', year: 'numeric'
+        day: '2-digit', month: '2-digit', year: 'numeric',
+        timeZone: 'UTC'
     });
 };
 
