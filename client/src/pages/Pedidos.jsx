@@ -282,7 +282,7 @@ export default function Pedidos() {
                     <div className="search-box">
                         <input
                             type="text"
-                            placeholder="Buscar por folio..."
+                            placeholder="Buscar por folio o cliente..."
                             value={search}
                             onChange={e => setSearch(e.target.value)}
                         />

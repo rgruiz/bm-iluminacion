@@ -18,9 +18,14 @@ router.get('/', async (req, res) => {
         }
 
         if (search) {
+            const Cliente = require('../models/Cliente');
+            const clientesMatch = await Cliente.find({ razon_social: { $regex: search, $options: 'i' } }, '_id');
+            const clientIds = clientesMatch.map(c => c._id);
+
             query.$or = [
                 { folio: { $regex: search, $options: 'i' } },
-                { notas: { $regex: search, $options: 'i' } }
+                { notas: { $regex: search, $options: 'i' } },
+                { cliente_id: { $in: clientIds } }
             ];
         }
 
