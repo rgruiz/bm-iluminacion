@@ -103,7 +103,7 @@ export function Sidebar({ currentPath, onNavigate, onLogout }) {
                 <div className="sidebar-brand" onClick={() => handleNav('/empresa')} style={{ cursor: 'pointer' }} title="Datos de la empresa">
                     <div className="brand-icon">💡</div>
                     <div>
-                        <h1>BM Iluminación</h1>
+                        <h1>Bruno y Marcelo Iluminación</h1>
                         <span>Sistema de Gestión</span>
                     </div>
                 </div>

@@ -27,7 +27,7 @@ export default function Login({ onLogin }) {
             <div className="login-card">
                 <div className="brand">
                     <div className="logo">💡</div>
-                    <h1>BM Iluminación</h1>
+                    <h1>Bruno y Marcelo Iluminación</h1>
                     <p>Sistema de Gestión</p>
                 </div>
                 {error && <div className="login-error">{error}</div>}

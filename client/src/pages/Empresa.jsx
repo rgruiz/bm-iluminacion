@@ -76,7 +76,7 @@ export default function Empresa() {
         <div>
             <div className="page-header">
                 <h2>Datos de la Empresa</h2>
-                <p>Información fiscal y de contacto de BM Iluminación</p>
+                <p>Información fiscal y de contacto de Bruno y Marcelo Iluminación</p>
             </div>
 
             <div className="card" style={{ maxWidth: '800px' }}>

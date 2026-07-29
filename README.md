@@ -1,4 +1,4 @@
-# BM Iluminación - Sistema de Gestión
+# Bruno y Marcelo Iluminación - Sistema de Gestión
 
 Este proyecto está construido usando **Node.js + Express** para el backend y **React + Vite** para el frontend. Utiliza **MongoDB** como base de datos.
 

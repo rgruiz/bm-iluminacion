@@ -129,7 +129,7 @@ export default function Clientes() {
             <div className="page-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem' }}>
                 <div>
                     <h2>Clientes</h2>
-                    <p>Gestión de clientes de BM Iluminación</p>
+                    <p>Gestión de clientes de Bruno y Marcelo Iluminación</p>
                 </div>
                 <button className="btn btn-primary" onClick={openNew}>+ Nuevo Cliente</button>
             </div>
